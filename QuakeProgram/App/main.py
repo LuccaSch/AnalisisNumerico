@@ -113,7 +113,7 @@ else:
         trafo_suavizada = np.abs(np.fft.fft(señal_suavizada)/len(t)) #hacemos la trasformada de fourier de la funcion suavizada
         
         
-        #mostrarGrafica(t,ft,indice,trafo_fourier,frecuencia,señal_suavizada,trafo_suavizada) #mostramos la grafica en funcion de t, su trasformada y sus respectivas suavizadas
+        mostrarGrafica(t,ft,indice,trafo_fourier,frecuencia,señal_suavizada,trafo_suavizada) #mostramos la grafica en funcion de t, su trasformada y sus respectivas suavizadas
         
         #c
         
@@ -151,11 +151,15 @@ else:
     correlacion23= np.correlate(terremoto2_submuestrado_trasf,trasformadas[2],mode="valid") #Calculamos este valor para ambas ya que sera la diferencia entre los spectros de frecuencia de terremoto1-2 y terremoto3
    
     with open((ruta / "Outputs" / "Respuestas"), 'a') as archivo:
-        if (np.max(correlacion13)>= np.max(correlacion23)): #si correlacion13 es mayor la diferencia de espectros es menor y por ende las graficas 1 y 3 son mas similares que 2 y 3
+        if (np.max(correlacion13)> np.max(correlacion23)): #si correlacion13 es mayor la diferencia de espectros es menor y por ende las graficas 1 y 3 son mas similares que 2 y 3
             mensaje= f"El sismografo terremoto 3 esta mas cerca de terremoto 1.\n" #guardamos dentro de respuesta 
             print(mensaje)
             archivo.write(mensaje)
-        else:
+        elif (np.max(correlacion13)< np.max(correlacion23)):
             mensaje= f"El sismografo terremoto 3 esta mas cerca de terremoto 2.\n" #si correlacion13 es mayor la diferencia de espectros es menor y por ende las graficas 2 y 3 son mas similares que 1 y 3
+            print(mensaje)
+            archivo.write(mensaje)
+        else:
+            mensaje= f"El sismografo terremoto 3 esta a la misma distancia de terremoto 1 y terremoto 2.\n" #si correlacion13 es mayor la diferencia de espectros es menor y por ende las graficas 2 y 3 son mas similares que 1 y 3
             print(mensaje)
             archivo.write(mensaje)
