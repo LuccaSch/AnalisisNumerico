@@ -113,7 +113,7 @@ else:
         trafo_suavizada = np.abs(np.fft.fft(señal_suavizada)/len(t)) #hacemos la trasformada de fourier de la funcion suavizada
         
         
-        mostrarGrafica(t,ft,indice,trafo_fourier,frecuencia,señal_suavizada,trafo_suavizada) #mostramos la grafica en funcion de t, su trasformada y sus respectivas suavizadas
+        #mostrarGrafica(t,ft,indice,trafo_fourier,frecuencia,señal_suavizada,trafo_suavizada) #mostramos la grafica en funcion de t, su trasformada y sus respectivas suavizadas
         
         #c
         
@@ -129,14 +129,14 @@ else:
     #Para poder comprar los terremotos nesesitamos que la cantidad de datos muestreados sea la misma, para ello debemos realizar un submuestreo del terremoto2 para que tenga 4000 muestras
     
     terremoto2_submuestrado=submuestreo_terremotos(terremotos[0],terremotos[1])
-    terremoto2_submuestrado_trasf= np.abs(np.fft.fft(terremoto2_submuestrado)/4000)
+    terremoto2_submuestrado_trasf= np.abs((np.fft.fft(terremoto2_submuestrado)/4000)*2)
     
     suma_trafo = terremoto2_submuestrado_trasf + trasformadas[0]   #Hacemos suma de los vectores de la transformada 
     prod_trafo = terremoto2_submuestrado_trasf*trasformadas[0]     #Hacemos producto de los vectores de la transforma 
 
     is_max = np.argmax(suma_trafo)
     fsum_max = abs(frecuencias[0][is_max])               #Frecuencia mas alta de la sumatoria 
-
+ 
     ip_max = np.argmax(prod_trafo)
     fprod_max = abs(frecuencias[0][ip_max])              #Frecuencia mas alta de los productos 
 
