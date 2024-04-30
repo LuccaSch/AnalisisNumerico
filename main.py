@@ -4,6 +4,12 @@ import os
 
 from numpy import array
 from matplotlib import pyplot as plt
+
+def ventana_gausiana():
+    #Podemos variar el valor de suavizado para suavizar mas o menos la funcion
+    suavizado=3
+    ventana = np.exp(-0.5 * (np.arange(-30,31)/suavizado)**2)
+    return ventana 
   
 def Grafica(x,y,nombre,nombrex,nombrey):
     plt.figure()
@@ -28,12 +34,7 @@ def Grafica(x,y,nombre,nombrex,nombrey):
     fig.suptitle(nombre)  # Nombre de la figura
 
     # Devolver la figura
-    return fig
-
-def ventana_gausiana(suavizado):
-    #Podemos variar el valor de suavizado para suavizar mas o menos la funcion
-    ventana = np.exp(-0.5 * (np.arange(-30,31)/suavizado)**2)
-    return ventana    
+    return fig   
 
 def directorio_vacio(ruta):
     # Obtener la lista de archivos y directorios en la ruta especificada
@@ -85,23 +86,14 @@ def descomprimirtxt(ruta):
     
     respuesta.append(t)
     respuesta.append(ft) #Creamos una lista de los ft que sera usada para el ejer E
-    respuesta.append(trafo_fourier)
     respuesta.append(frecuencia)
+    respuesta.append(trafo_fourier)
     respuesta.append(coeficiente_fourier)
-    respuesta.append(False)
     return respuesta
-    
-def convolucionar(respuesta):
-#b
-    h = ventana_gausiana(3) #elegimos un suavizado de 3 pero podriamos suvirlo para suavizar mas la funcion
-    señal_suavizada = np.convolve(respuesta[1], h, mode='same') #convolucionamos la loma h con nuestra funcion, la longitud quedara como len(t) ya que usamos el mode ´same´ para facilitarnos mas adelante
-    trafo_suavizada = np.abs((np.fft.fft(señal_suavizada)/len(respuesta[0]))*2) #hacemos la trasformada de fourier de la funcion suavizada
-    respuesta[1]=señal_suavizada
-    respuesta[2]=trafo_suavizada
-    return
-#c
-    
-#    indice_max = np.argmax(trafo_fourier) #Buscamos dentro de trafo_fourier el valor maximo
+
+#def analisisDetallado(respuesta):
+#    #c
+#    indice_max = np.argmax(respuesta[]) #Buscamos dentro de trafo_fourier el valor maximo
 #    frecuencia_max = abs(frecuencia[indice_max]) #La frecuencia maxima estara en frecuencia[valor_maximo]
 #    print(f"La frecuencia de mayor aceleración es {frecuencia_max}") #Mostramos el valor por pantalla
 #    with open((ruta / "Outputs" / "Respuestas"), 'a') as archivo: #Lo guardamos en  el archivo Respuestas dentro de Outputs
