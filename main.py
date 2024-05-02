@@ -13,7 +13,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-
+#VARIABLES GLOBALES 
 #Defino una lista y su indice que llevara todos los datos de los terremotos
 respuestas=[]
 # pun es el puntero que señala al terremoto dentro de respuestas en el que estamos parado respuestas[pun]=terremoto actual
@@ -34,8 +34,7 @@ imp= ruta / "Imputs"
 
 ruta_output=ruta / "Outputs"
 
-#CARGAR LOS DATOS EN LA MATRIZ
-
+#FUNCIONES
 #Verificar archivos
 def obtener_archivos_en_directorio(ruta):
     # Obtener la lista de archivos y directorios en la ruta especificada
@@ -128,8 +127,8 @@ def submuestreo_terremotos(terremoto1, terremoto2):
     
 def relative_to_assets(path: str) -> Path:
     return rutaGuiAssets / Path(path)
-#Funcion del boton OPERAR que tiene 3 subbotones covolucionar, submuestrear y sumarFreq
 
+#Funcion del boton OPERAR que tiene 3 subbotones covolucionar, submuestrear y sumarFreq
 def operar(frame):
     ventana2_botones = tk.Toplevel(root)
     ventana2_botones.title("Operar")
@@ -279,7 +278,7 @@ def antitransformar(frame):
     plt.close('all')
 
 
-#Funcion para el Boton ANALISAR que tiene 3 subotones Comparar Y analisisDeMaximos
+#Funcion para el Boton ANALISAR que tiene 2 subotones Comparar Y analisisDeMaximos
 def analisar():
     global pun
     global verificador
@@ -361,9 +360,10 @@ def posterior(frame):
 
 #GUI
 if (not(directorio_vacio(imp))):
+    #CASO DEL DIRECTORIO NO VACIO
     #buscamos los archivos de inputs
     archivo=obtener_archivos_en_directorio(imp)
-    #Se carga la matriz respuestas[t][x(t)][wt][X[wt]][Nombe_archivo_txt]
+    #Se carga la matriz respuestas[[t][x(t)][wt][X[wt]][Nombe_archivo_txt]]
     for indice in archivo:
         direc = ruta / "Imputs" / indice
         respuesta=descomprimirtxt(direc)
@@ -445,6 +445,7 @@ if (not(directorio_vacio(imp))):
     # Ejecutar la aplicación en loop, nesesario para su funcionamiento
     root.mainloop()
 else:
+    #CASO DIRECTORIO VACIO
     # Función para abrir la carpeta de inputs
     def abrir_carpeta_inputs():
         root.withdraw()  # Oculta la ventana principal mientras se selecciona la carpeta
