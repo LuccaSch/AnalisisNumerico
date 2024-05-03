@@ -77,6 +77,24 @@ def directorio_vacio(ruta):
 
 
 #Funciones auxiliares para otras funciones
+def compararTerremotos(arr1, arr2):
+    def escalar_product(array1,array2):
+        return sum([a*b for a,b in zip(array1,array2)])
+
+    def module_of(array1):
+        return sum([a**2 for a in array1])**0.5
+
+    def multiply_each(array1, scalar):
+        return [a*scalar for a in array1]
+
+    arr1=multiply_each(arr1,1/module_of(arr1))
+    arr2=multiply_each(arr2,1/module_of(arr2))
+
+    res=escalar_product(arr1,arr2)
+
+    print(res)
+    return res
+
 def encontrarCualRespuestas(nombre):
     for i, respuesta in enumerate(respuestas):
         if respuesta[5] == nombre:
@@ -278,7 +296,7 @@ def antitransformar(frame):
     plt.close('all')
 
 
-#Funcion para el Boton ANALISAR que tiene 2 subotones Comparar Y analisisDeMaximos
+#Funcion para el Boton ANALIZAR que tiene 2 subotones Comparar Y analisisDeMaximos
 def analisar():
     global pun
     global verificador
@@ -311,7 +329,8 @@ def compararT(ven):
             if (len(respuestas[pun][0]))!=len(respuestas[punaux][0]):
                 messagebox.showerror("Error",f"Ambos terremotos deben tener la misma cantidad de datos Muestreados")
             else:
-                correlacionEnHz= np.correlate(respuestas[pun][3],respuestas[punaux][3],mode="valid")
+                modulo = np.linalg.norm(respuestas[pun][1])
+                correlacionEnHz= correlacionEnHz= compararTerremotos(respuestas[pun][3],respuestas[punaux][3])
                 nombre="Analisis de "+ respuestas[pun][5]
                 with open((ruta_output / nombre), 'a') as archivo:
                     mensaje= f"El nivel de similitud entre {respuestas[pun][5]} y {respuestas[punaux][5]} las graficas en Frecuencia es de {correlacionEnHz}.\n"
@@ -370,7 +389,17 @@ if (not(directorio_vacio(imp))):
         #esto es sucio pero mas tarde me di cuenta que quiero el nombre del terremoto
         respuesta.append(indice)
         verificador.append(False)
-        respuestas.append(respuesta)   
+        respuestas.append(respuesta)
+        nombre="Coeficientes de "+ indice
+        with open((ruta_output / nombre), 'a') as archivo:
+            for coeficiente in respuesta[4]:#[4]==coeficiente
+                mensaje= f"{coeficiente:.3f}\n"
+                archivo.write(mensaje)
+        nombre="Transformada de "+ indice
+        with open((ruta_output / nombre), 'a') as archivo2:
+            for f, X_f in zip(respuesta[2],respuesta[3]):
+                mensaje= f"{f:.3f}       {X_f:.3f}\n"
+                archivo2.write(mensaje)   
     # Crear ventana Tkinter que sera la raiz
     root = tk.Tk()
     root.title("QuakeProgram")
@@ -435,7 +464,7 @@ if (not(directorio_vacio(imp))):
     btn_operar = ttk.Button(frame_botones, text="Operar", command=lambda: operar(frame_grafica))
     btn_operar.pack(side=tk.LEFT, padx=5)
 
-    btn_analisar = ttk.Button(frame_botones, text="Analisar", command=lambda: analisar())
+    btn_analisar = ttk.Button(frame_botones, text="Analizar", command=lambda: analisar())
     btn_analisar.pack(side=tk.LEFT, padx=5)
 
     btn_posterior = ttk.Button(frame_botones, text="Posterior -->", command=lambda: posterior(frame_grafica))
